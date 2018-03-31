@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "Facebook Container",
-    "version": "1.2.5",
+    "name": "Youtube Container",
+    "version": "1.0.0",
 
-    "description": "Facebook Container isolates your Facebook activity from the rest of your web activity in order to prevent Facebook from tracking you outside of the Facebook website via third party cookies.",
+    "description": "Youtube Container isolates your Youtube activity from the rest of your web activity in order to prevent Youtube from tracking you outside of the Youtube website via third party cookies.",
 
     "icons": {
         "48": "icon.png",
@@ -12,12 +12,12 @@
 
     "applications": {
       "gecko": {
-        "id": "@contain-facebook",
+        "id": "@contain-youtube",
         "strict_min_version": "57.0"
       }
     },
 
-    "homepage_url": "https://github.com/mozilla/contain-facebook",
+    "homepage_url": "https://github.com/AbdullahDiaa/contain-youtube",
 
     "permissions": [
         "<all_urls>",

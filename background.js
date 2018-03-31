@@ -1,17 +1,17 @@
 // Param values from https://developer.mozilla.org/Add-ons/WebExtensions/API/contextualIdentities/create
-const FACEBOOK_CONTAINER_NAME = "Facebook";
-const FACEBOOK_CONTAINER_COLOR = "blue";
-const FACEBOOK_CONTAINER_ICON = "briefcase";
-const FACEBOOK_DOMAINS = ["facebook.com", "www.facebook.com", "fb.com"];
+const YOUTUBE_CONTAINER_NAME = "Youtube";
+const YOUTUBE_CONTAINER_COLOR = "red";
+const YOUTUBE_CONTAINER_ICON = "briefcase";
+const YOUTUBE_DOMAINS = ["youtube.com", "www.youtube.com", "m.youtube.com"];
 
 const MAC_ADDON_ID = "@testpilot-containers";
 
 let macAddonEnabled = false;
-let facebookCookieStoreId = null;
-let facebookCookiesCleared = false;
+let youtubeCookieStoreId = null;
+let youtubeCookiesCleared = false;
 
 const canceledRequests = {};
-const facebookHostREs = [];
+const youtubeHostREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -103,49 +103,49 @@ function shouldCancelEarly (tab, options) {
   return false;
 }
 
-function generateFacebookHostREs () {
-  for (let facebookDomain of FACEBOOK_DOMAINS) {
-    facebookHostREs.push(new RegExp(`^(.*\\.)?${facebookDomain}$`));
+function generateYoutubeHostREs () {
+  for (let youtubeDomain of YOUTUBE_DOMAINS) {
+    youtubeHostREs.push(new RegExp(`^(.*\\.)?${youtubeDomain}$`));
   }
 }
 
-function clearFacebookCookies () {
-  // Clear all facebook cookies
-  for (let facebookDomain of FACEBOOK_DOMAINS) {
-    const facebookCookieUrl = `https://${facebookDomain}/`;
+function clearYoutubeCookies () {
+  // Clear all youtube cookies
+  for (let youtubeDomain of YOUTUBE_DOMAINS) {
+    const youtubeCookieUrl = `https://${youtubeDomain}/`;
 
-    browser.cookies.getAll({domain: facebookDomain}).then(cookies => {
+    browser.cookies.getAll({domain: youtubeDomain}).then(cookies => {
       for (let cookie of cookies) {
-        browser.cookies.remove({name: cookie.name, url: facebookCookieUrl});
+        browser.cookies.remove({name: cookie.name, url: youtubeCookieUrl});
       }
     });
   }
 }
 
 async function setupContainer () {
-  // Use existing Facebook container, or create one
-  const contexts = await browser.contextualIdentities.query({name: FACEBOOK_CONTAINER_NAME})
+  // Use existing Youtube container, or create one
+  const contexts = await browser.contextualIdentities.query({name: YOUTUBE_CONTAINER_NAME})
   if (contexts.length > 0) {
-    facebookCookieStoreId = contexts[0].cookieStoreId;
+    youtubeCookieStoreId = contexts[0].cookieStoreId;
   } else {
     const context = await browser.contextualIdentities.create({
-      name: FACEBOOK_CONTAINER_NAME,
-      color: FACEBOOK_CONTAINER_COLOR,
-      icon: FACEBOOK_CONTAINER_ICON
+      name: YOUTUBE_CONTAINER_NAME,
+      color: YOUTUBE_CONTAINER_COLOR,
+      icon: YOUTUBE_CONTAINER_ICON
     })
-    facebookCookieStoreId = context.cookieStoreId;
+    youtubeCookieStoreId = context.cookieStoreId;
   }
 }
 
-async function containFacebook (options) {
-  // Listen to requests and open Facebook into its Container,
+async function containYoutube (options) {
+  // Listen to requests and open Youtube into its Container,
   // open other sites into the default tab context
   const requestUrl = new URL(options.url);
 
-  let isFacebook = false;
-  for (let facebookHostRE of facebookHostREs) {
-    if (facebookHostRE.test(requestUrl.host)) {
-      isFacebook = true;
+  let isYoutube = false;
+  for (let youtubeHostRE of youtubeHostREs) {
+    if (youtubeHostRE.test(requestUrl.host)) {
+      isYoutube = true;
       break;
     }
   }
@@ -162,17 +162,17 @@ async function containFacebook (options) {
 
   const tab = await browser.tabs.get(options.tabId);
   const tabCookieStoreId = tab.cookieStoreId;
-  if (isFacebook) {
-    if (tabCookieStoreId !== facebookCookieStoreId && !tab.incognito) {
-      // See https://github.com/mozilla/contain-facebook/issues/23
-      // Sometimes this add-on is installed but doesn't get a facebookCookieStoreId ?
-      if (facebookCookieStoreId) {
+  if (isYoutube) {
+    if (tabCookieStoreId !== youtubeCookieStoreId && !tab.incognito) {
+      // See https://github.com/mozilla/contain-youtube/issues/23
+      // Sometimes this add-on is installed but doesn't get a youtubeCookieStoreId ?
+      if (youtubeCookieStoreId) {
         if (shouldCancelEarly(tab, options)) {
           return {cancel: true};
         }
         browser.tabs.create({
           url: requestUrl.toString(),
-          cookieStoreId: facebookCookieStoreId,
+          cookieStoreId: youtubeCookieStoreId,
           active: tab.active,
           index: tab.index
         });
@@ -181,7 +181,7 @@ async function containFacebook (options) {
       }
     }
   } else {
-    if (tabCookieStoreId === facebookCookieStoreId) {
+    if (tabCookieStoreId === youtubeCookieStoreId) {
       if (shouldCancelEarly(tab, options)) {
         return {cancel: true};
       }
@@ -200,12 +200,12 @@ async function containFacebook (options) {
   await setupMACAddonManagementListeners();
   macAddonEnabled = await isMACAddonEnabled();
 
-  clearFacebookCookies();
-  generateFacebookHostREs();
+  clearYoutubeCookies();
+  generateYoutubeHostREs();
   await setupContainer();
 
   // Add the request listener
-  browser.webRequest.onBeforeRequest.addListener(containFacebook, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
+  browser.webRequest.onBeforeRequest.addListener(containYoutube, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
 
   // Clean up canceled requests
   browser.webRequest.onCompleted.addListener((options) => {

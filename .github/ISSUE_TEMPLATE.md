@@ -6,7 +6,7 @@
 - Is "Firefox will: Never remember history" in the Firefox Preferences/Options under "Privacy & Security > History" selected? Yes/No:
 - Are you using Firefox in a Private Window? Yes/No:
 - Can you see a grayed out but ticked Checkbox with the description "Enable Container Tabs" in the Firefox Preferences/Options under "Tabs"? Yes/No:
-- Facebook Container Version:
+- Youtube Container Version:
 - Operating System + Version:
 - Firefox Version:
 - Other installed Add-ons + Version + Enabled/Disabled-Status:

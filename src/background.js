@@ -2,7 +2,7 @@
 const YOUTUBE_CONTAINER_NAME = "YouTube";
 const YOUTUBE_CONTAINER_COLOR = "red";
 const YOUTUBE_CONTAINER_ICON = "briefcase";
-const YOUTUBE_DOMAINS = ["youtube.com", "www.youtube.com", "m.youtube.com"];
+const YOUTUBE_DOMAINS = ["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"];
 
 const MAC_ADDON_ID = "@testpilot-containers";
 

@@ -1,6 +1,6 @@
 {
   "name": "contain-youtube",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "YouTube Container isolates your YouTube activity from the rest of your web activity in order to prevent YouTube from tracking you outside of the YouTube website via third party cookies. ",
   "main": "background.js",
   "scripts": {

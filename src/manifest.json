@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "YouTube Container",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Youtube Container isolates your Youtube activity from the rest of your web activity in order to prevent Youtube from tracking you outside of the Youtube website via third party cookies.",
     "icons": {
         "48": "icon.png",
